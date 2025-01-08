@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game Bắn Gà </title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display: block;
+            background-color: #87ceeb;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Player Gun
+        const gun = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 50,
+            width: 50,
+            height: 30,
+            speed: 5,
+            moveLeft: false,
+            moveRight: false,
+            draw: function() {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            },
+            move: function() {
+                if (this.moveLeft && this.x > 0) {
+                    this.x -= this.speed;
+                }
+                if (this.moveRight && this.x + this.width < canvas.width) {
+                    this.x += this.speed;
+                }
+            }
+        };
+
+        // Bullet
+        const bullets = [];
+        const bulletSpeed = 8;
+
+        function shoot() {
+            bullets.push({ x: gun.x + gun.width / 2 - 5, y: gun.y, width: 10, height: 20 });
+        }
+
+        // Chicken
+        const chickens = [];
+        const chickenSpeed = 2;
+
+        function createChicken() {
+            const x = Math.random() * (canvas.width - 40);
+            const y = Math.random() * (canvas.height / 2);
+            chickens.push({ x: x, y: y, width: 40, height: 40, speed: chickenSpeed });
+        }
+
+        function moveChickens() {
+            for (let i = 0; i < chickens.length; i++) {
+                chickens[i].y += chickens[i].speed;
+                if (chickens[i].y > canvas.height) {
+                    chickens[i].y = -40;
+                    chickens[i].x = Math.random() * (canvas.width - 40);
+                }
+            }
+        }
+
+        function checkCollisions() {
+            for (let i = 0; i < bullets.length; i++) {
+                for (let j = 0; j < chickens.length; j++) {
+                    if (bullets[i].x < chickens[j].x + chickens[j].width &&
+                        bullets[i].x + bullets[i].width > chickens[j].x &&
+                        bullets[i].y < chickens[j].y + chickens[j].height &&
+                        bullets[i].y + bullets[i].height > chickens[j].y) {
+                        // Remove chicken and bullet on collision
+                        chickens.splice(j, 1);
+                        bullets.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Game Loop
+        let lastChickenTime = Date.now();
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            gun.move();
+            gun.draw();
+
+            moveChickens();
+            checkCollisions();
+
+            // Draw bullets
+            for (let i = 0; i < bullets.length; i++) {
+                bullets[i].y -= bulletSpeed;
+                ctx.fillStyle = '#150101';
+                ctx.fillRect(bullets[i].x, bullets[i].y, bullets[i].width, bullets[i].height);
+            }
+
+            // Draw chickens
+            for (let i = 0; i < chickens.length; i++) {
+                ctx.fillStyle = '#ff6600';
+                ctx.fillRect(chickens[i].x, chickens[i].y, chickens[i].width, chickens[i].height);
+            }
+
+            // Create new chickens every 2 seconds
+            if (Date.now() - lastChickenTime > 2000) {
+                createChicken();
+                lastChickenTime = Date.now();
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Handle keyboard events
+        window.addEventListener('keydown', function(event) {
+            if (event.code === 'ArrowLeft') {
+                gun.moveLeft = true;
+            } else if (event.code === 'ArrowRight') {
+                gun.moveRight = true;
+            } else if (event.code === 'Space') {
+                shoot();
+            }
+        });
+
+        window.addEventListener('keyup', function(event) {
+            if (event.code === 'ArrowLeft') {
+                gun.moveLeft = false;
+            } else if (event.code === 'ArrowRight') {
+                gun.moveRight = false;
+            }
+        });
+
+        // Start the game loop
+        gameLoop();
+    </script>
+</body>
+</html>
