@@ -1,0 +1,43 @@
+/* Đặt toàn bộ body để hiển thị theo kiểu flex, căn giữa các phần tử */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f9e3e3;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden; /* Đảm bảo không bị cuộn khi canvas full screen */
+}
+
+/* Container cho nội dung chính */
+.container {
+    text-align: center;
+    z-index: 1; /* Đảm bảo container ở trên canvas */
+}
+
+/* Chỉnh sửa cho tiêu đề */
+.header_text {
+    font-size: 3em;
+    color: #d32f2f;
+    margin-bottom: 20px; /* Thêm khoảng cách dưới tiêu đề */
+}
+
+/* Chỉnh sửa hình ảnh gif để responsive */
+.gif_container img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+}
+
+/* CSS cho canvas (heart animation) */
+canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .2);
+    display: none; /* Ẩn canvas khi bắt đầu */
+    z-index: 0; /* Đảm bảo canvas dưới các phần tử khác */
+}
