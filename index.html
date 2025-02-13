@@ -3,137 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fireworks </title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        canvas {
-            display: block;
-        }
-    </style>
+    <title>Lock 2 </title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="fireworksCanvas"></canvas>
-
-    <script>
-        const canvas = document.getElementById('fireworksCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // Set canvas size
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        // Firework class
-        class Firework {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.size = 5;
-                this.speedY = -5;
-                this.exploded = false;
-                this.particles = [];
-            }
-
-            move() {
-                if (!this.exploded) {
-                    this.y += this.speedY;
-                    if (this.y <= canvas.height / 2) {
-                        this.explode();
-                    }
-                } else {
-                    this.particles.forEach(particle => particle.move());
-                }
-            }
-
-            explode() {
-                this.exploded = true;
-                for (let i = 0; i < 50; i++) { // 50 particles per explosion
-                    const speedX = Math.random() * 4 - 2;
-                    const speedY = Math.random() * 4 - 2;
-                    this.particles.push(new Particle(this.x, this.y, this.color, speedX, speedY));
-                }
-            }
-
-            draw() {
-                if (!this.exploded) {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.fill();
-                } else {
-                    this.particles.forEach(particle => particle.draw());
-                }
-            }
-        }
-
-        // Particle class (for explosion particles)
-        class Particle {
-            constructor(x, y, color, speedX, speedY) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.size = Math.random() * 3 + 2;
-                this.speedX = speedX;
-                this.speedY = speedY;
-                this.lifetime = 50;
-            }
-
-            move() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.lifetime -= 1;
-            }
-
-            draw() {
-                if (this.lifetime > 0) {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.fill();
-                }
-            }
-        }
-
-        // Create fireworks automatically every 2 seconds
-        let lastFireworkTime = Date.now();
-        const fireworks = [];
-        const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
-
-        function createFirework() {
-            const x = Math.random() * canvas.width;
-            const y = canvas.height;
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            fireworks.push(new Firework(x, y, color));
-        }
-
-        function update() {
-
-            if (Date.now() - lastFireworkTime > 200) {
-                createFirework();
-                lastFireworkTime = Date.now();
-            }
-
-            // Clear canvas and draw fireworksNNNN
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            fireworks.forEach(firework => {
-                firework.move();
-                firework.draw();
-            });
-
-            requestAnimationFrame(update);
-        }
-
-        // Start the fireworks display
-        update();
-    </script>
+    <div class="container">
+        <h1>Em có muốn nhận quà Valentine từ anh hăm :3 </h1>
+        <div class="buttons">
+            <button class="yes-button" onclick="handleYesClick()">Có</button>
+            <button class="no-button" onclick="handleNoClick()">Không</button>
+        </div>
+        <div class="gif_container">
+            <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW5lenZyZHI5OXM2eW95b3pmMG40cWVrMDhtNjVuM3A4dGNxa2g2dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VM1fcpu2bKs1e2Kdbj/giphy.gif" alt="Cute GIF">
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
